@@ -47,3 +47,7 @@ dependencies {
 
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
+
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}

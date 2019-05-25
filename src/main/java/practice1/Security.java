@@ -12,27 +12,54 @@ public class Security {
 
     public boolean hasAccess(User user, Permission permission, ImmutableList<Permission> permissions) {
 
-        boolean isAccess = false;
-        if (user == null) {
-            return isAccess;
+        if (isNullUser(user)) {
+            return prohibit();
         }
 
-        if (permission == null) {
-            return isAccess;
+        if (isNullPermission(permission)) {
+            return prohibit();
         }
 
-        if (permissions.size() == 0) {
-            return isAccess;
+        if (isEmptyPermissions(permissions)) {
+            return prohibit();
         }
 
-        if (securityChecker.isAdmin()) {
-            isAccess = true;
+        if (isAdmin()) {
+            return access();
         }
 
-        if (this.securityChecker.checkPermission(user, permission) || permissions.contains(permission)) {
-            isAccess = true;
+        if (isValidPermission(user, permission, permissions)) {
+            return access();
         }
 
-        return isAccess;
+        return prohibit();
+    }
+
+    private boolean isNullUser(User user){
+        return user == null;
+    }
+
+    private boolean isNullPermission(Permission permission) {
+        return permission == null;
+    }
+
+    private boolean isEmptyPermissions(ImmutableList<Permission> permissions) {
+        return permissions.size() == 0;
+    }
+
+    private boolean isAdmin(){
+        return securityChecker.isAdmin();
+    }
+
+    private boolean isValidPermission(User user, Permission permission, ImmutableList<Permission> permissions){
+        return securityChecker.checkPermission(user, permission) || permissions.contains(permission);
+    }
+
+    private boolean access(){
+        return true;
+    }
+
+    private boolean prohibit(){
+        return false;
     }
 }

@@ -1,29 +1,26 @@
 package practice3;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class PriceCaculator {
 
-    protected List<OrderLineItem> orderLineItemList;
-    protected List<BigDecimal> discounts;
-    protected BigDecimal tax;
+    public PriceCaculator(){}
 
-    public BigDecimal calculate() {
+    public BigDecimal calculate(Order order) {
         BigDecimal subTotal = new BigDecimal(0);
 
         // Total up line items
-        for (OrderLineItem lineItem : orderLineItemList) {
+        for (OrderLineItem lineItem : order.getOrderLineItemList()) {
             subTotal = subTotal.add(lineItem.getPrice());
         }
 
         // Subtract discounts
-        for (BigDecimal discount : discounts) {
+        for (BigDecimal discount : order.getDiscounts()) {
             subTotal = subTotal.subtract(discount);
         }
 
         // calculate tax
-        BigDecimal tax = subTotal.multiply(this.tax);
+        BigDecimal tax = subTotal.multiply(order.getTax());
 
         // calculate GrandTotal
         BigDecimal grandTotal = subTotal.add(tax);
